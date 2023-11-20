@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using PrivateCollection.Models;
+
 namespace PrivateCollection
 {
     public class Program
@@ -11,8 +14,12 @@ namespace PrivateCollection
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            //builder.Services.AddDbContext<PrivateCollectionContext>(options => options.UseSqlite());
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<PrivateCollectionContext>(options => 
+            options.UseSqlite(builder.Configuration.GetConnectionString("PrivateCollectionDB")));
 
             var app = builder.Build();
 
