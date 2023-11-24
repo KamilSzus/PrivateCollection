@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PrivateCollection.Controllers
 {
@@ -9,32 +8,52 @@ namespace PrivateCollection.Controllers
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
     {
-        private readonly PrivateCollectionContext _context;
+        private readonly PrivateCollectionContext Context;
 
         public BooksController(PrivateCollectionContext context)
         {
-            _context = context;
+            this.Context = context;
         }
 
+        /// <summary>
+        ///   Return all book from my private collection
+        /// </summary>
+        /// <returns>List of books</returns>
         [HttpGet]
         public async Task<IActionResult> GetBooks()
         {
-            var items = await _context.Books.ToListAsync();
+            var items = await this.Context.Books.ToListAsync();
             return Ok(items);
         }
 
+        /// <summary>
+        ///  Add book to collection
+        /// </summary>
+        /// <param name="book"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody]Book book)
         {
             if(ModelState.IsValid)
             {
-                await _context.Books.AddAsync(book);
-                await _context.SaveChangesAsync();
+                if (await this.Context.Books.AnyAsync(b => b.Title.Equals(book.Title)))
+                {
+                    return Conflict("A book with the same title already exists.");
+                }
 
-                return CreatedAtAction("GetBooks", new { book.Id }, book);
+                await this.Context.Books.AddAsync(book);
+                await this.Context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetBooks), new { book.Id }, book);
             }
 
-            return new JsonResult("Something went wrong") { StatusCode = 500 };
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBook()
+        {
+            throw new NotImplementedException();
         }
     }
     }
