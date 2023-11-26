@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Models;
+using System.Reflection;
 
 namespace PrivateCollection
 {
@@ -16,9 +17,15 @@ namespace PrivateCollection
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             //builder.Services.AddDbContext<PrivateCollectionContext>(options => options.UseSqlite());
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-            builder.Services.AddDbContext<PrivateCollectionContext>(options => 
+                c.IncludeXmlComments(xmlPath);
+            });
+
+            builder.Services.AddDbContext<PrivateCollectionContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("PrivateCollectionDB")));
 
             var app = builder.Build();
