@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Models;
+using System.Linq;
 
 namespace PrivateCollection.Controllers
 {
@@ -32,9 +33,9 @@ namespace PrivateCollection.Controllers
         /// <param name="book"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateBook([FromBody]Book book)
+        public async Task<IActionResult> CreateBook([FromBody] Book book)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (await this.Context.Books.AnyAsync(b => b.Title.Equals(book.Title)))
                 {
@@ -50,10 +51,23 @@ namespace PrivateCollection.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteBook()
+        /// <summary>
+        /// Delete book by title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        [HttpDelete("{title}")]
+        public async Task<IActionResult> DeleteBookByTitle(string title)
         {
-            throw new NotImplementedException();
+            var bookToDelete = await this.Context.Books.FirstOrDefaultAsync(b => b.Title.Equals(title));
+
+            if (bookToDelete is null)
+                return NotFound();
+
+            this.Context.Books.Remove(bookToDelete);
+            await this.Context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
-    }
+}
