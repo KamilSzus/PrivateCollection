@@ -1,6 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
-using PrivateCollection.Models;
+using PrivateCollection.Data;
 using System.Reflection;
 
 namespace PrivateCollection

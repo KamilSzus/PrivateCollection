@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PrivateCollection.Models;
+using System.Reflection.Metadata;
 
-namespace PrivateCollection.Models
+namespace PrivateCollection.Data
 {
     public class PrivateCollectionContext : DbContext
     {
@@ -9,7 +11,8 @@ namespace PrivateCollection.Models
         {
         }
 
-        public virtual DbSet<Book> Books { get; set; }
-
+        public DbSet<Book> Books { get; set; }
+        public DbSet<BoardGame> BoardsGames { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
