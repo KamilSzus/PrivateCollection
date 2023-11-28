@@ -5,6 +5,9 @@
         ComicBook,
         Fantasy,
         Horror,
-        SciFi
+        SciFi,
+        Eurogames,
+        Wargames,
+        ThematicGames
     }
 }
