@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Data;
+using PrivateCollection.Interfaces;
+using PrivateCollection.Repository;
 using System.Reflection;
 
 namespace PrivateCollection
@@ -16,6 +18,7 @@ namespace PrivateCollection
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             //builder.Services.AddDbContext<PrivateCollectionContext>(options => options.UseSqlite());
+            builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
