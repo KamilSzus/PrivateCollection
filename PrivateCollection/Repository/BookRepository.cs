@@ -34,7 +34,7 @@ namespace PrivateCollection.Repository
             return await this.Context.Books.OrderBy(b => b.Title).ToListAsync();
         }
 
-        public async Task<ICollection<Book>> GetUnFishedBooks()
+        public async Task<ICollection<Book>> GetUnfishedBooks()
         {
             return await this.Context.Books.Where(b => b.IsFinished == false).ToListAsync();
         }

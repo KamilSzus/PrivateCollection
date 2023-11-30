@@ -8,6 +8,6 @@ namespace PrivateCollection.Interfaces
         public Task<Book?> GetBookById(int id);
         public Task<Book?> GetBookByTitle(string title);
         public Task<bool> BookExist(int id);
-        public Task<ICollection<Book>> GetUnFishedBooks();
+        public Task<ICollection<Book>> GetUnfishedBooks();
     }
 }
