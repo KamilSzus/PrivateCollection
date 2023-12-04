@@ -14,27 +14,27 @@ namespace PrivateCollection.Repository
             this.Context = context;
         }
 
-        public async Task<bool> BookExist(int id)
+        public async Task<bool> BookExistAsync(int id)
         {
             return await this.Context.Books.AnyAsync(b => b.Id == id);
         }
 
-        public async Task<Book?> GetBookById(int id)
+        public async Task<Book?> GetBookByIdAsync(int id)
         {
             return await this.Context.Books.Where(b => b.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Book?> GetBookByTitle(string title)
+        public async Task<Book?> GetBookByTitleAsync(string title)
         {
             return await this.Context.Books.Where(b => b.Title == title).FirstOrDefaultAsync();
         }
 
-        public async Task<ICollection<Book>> GetBooks()
+        public async Task<ICollection<Book>> GetBooksAsync()
         {
             return await this.Context.Books.OrderBy(b => b.Title).ToListAsync();
         }
 
-        public async Task<ICollection<Book>> GetUnfishedBooks()
+        public async Task<ICollection<Book>> GetUnfishedBooksAsync()
         {
             return await this.Context.Books.Where(b => b.IsFinished == false).ToListAsync();
         }

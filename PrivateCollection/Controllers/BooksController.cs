@@ -26,7 +26,7 @@ namespace PrivateCollection.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Book>))]
         public async Task<IActionResult> GetBooks()
         {
-            var books = await this.BookRepository.GetBooks();
+            var books = await this.BookRepository.GetBooksAsync();
 
             if(!ModelState.IsValid) 
                 return BadRequest(ModelState);
@@ -45,10 +45,10 @@ namespace PrivateCollection.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetBookById(int bookId)
         {
-            if(await this.BookRepository.BookExist(bookId))
+            if(await this.BookRepository.BookExistAsync(bookId))
                 return NotFound();
 
-            var book = await this.BookRepository.GetBookById(bookId);
+            var book = await this.BookRepository.GetBookByIdAsync(bookId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -67,7 +67,7 @@ namespace PrivateCollection.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetBookByTitle(string title)
         {
-            var book = await this.BookRepository.GetBookByTitle(title);
+            var book = await this.BookRepository.GetBookByTitleAsync(title);
 
             if(book is null)
                 return NotFound();
@@ -86,7 +86,7 @@ namespace PrivateCollection.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))]
         public async Task<IActionResult> GetUnfinishedBooks()
         {
-            return Ok(await this.BookRepository.GetUnfishedBooks());
+            return Ok(await this.BookRepository.GetUnfishedBooksAsync());
         }
 
 
