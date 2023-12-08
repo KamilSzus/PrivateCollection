@@ -1,9 +1,8 @@
 ﻿namespace PrivateCollection.Dto
 {
     public record BookDto(
-        string name,
-        List<string> author,
-        string category,
-        bool isFinished
-        );
+        string Name,
+        List<string> Author,
+        string Category,
+        bool IsFinished);
 }
