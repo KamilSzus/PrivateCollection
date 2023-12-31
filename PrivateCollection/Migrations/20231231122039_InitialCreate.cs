@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,15 +17,15 @@ namespace PrivateCollection.Migrations
                 name: "BoardsGames",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    NumberOfGamesPlayed = table.Column<int>(type: "INTEGER", nullable: false),
-                    PublishingHouse = table.Column<string>(type: "TEXT", nullable: false),
-                    InGameTime = table.Column<TimeSpan>(type: "TEXT", nullable: true),
-                    LastGame = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    GameCount = table.Column<int>(type: "INTEGER", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    NumberOfGamesPlayed = table.Column<int>(type: "integer", nullable: false),
+                    PublishingHouse = table.Column<string>(type: "text", nullable: false),
+                    InGameTime = table.Column<TimeSpan>(type: "interval", nullable: true),
+                    LastGame = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    GameCount = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,14 +36,14 @@ namespace PrivateCollection.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Authors = table.Column<string>(type: "TEXT", nullable: false),
-                    IsFinished = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ReadTime = table.Column<TimeSpan>(type: "TEXT", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Authors = table.Column<List<string>>(type: "text[]", nullable: false),
+                    IsFinished = table.Column<bool>(type: "boolean", nullable: false),
+                    ReadTime = table.Column<TimeSpan>(type: "interval", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,11 +54,11 @@ namespace PrivateCollection.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Genre = table.Column<int>(type: "INTEGER", nullable: false),
-                    BoardGameId = table.Column<int>(type: "INTEGER", nullable: true),
-                    BookId = table.Column<long>(type: "INTEGER", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Genre = table.Column<int>(type: "integer", nullable: false),
+                    BoardGameId = table.Column<int>(type: "integer", nullable: true),
+                    BookId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
