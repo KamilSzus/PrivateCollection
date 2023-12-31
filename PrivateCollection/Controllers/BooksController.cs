@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PrivateCollection.Data;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
-using PrivateCollection.Models;
 
 namespace PrivateCollection.Controllers
 {
@@ -12,10 +10,12 @@ namespace PrivateCollection.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository BookRepository;
+        private readonly IMapper Mapper;
 
-        public BooksController(IBookRepository bookRepository)
+        public BooksController(IBookRepository bookRepository, IMapper mapper)
         {
             this.BookRepository = bookRepository;
+            this.Mapper = mapper;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace PrivateCollection.Controllers
         /// </summary>
         /// <returns>List of books</returns>
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Book>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))]
         public async Task<IActionResult> GetBooks()
         {
             var books = await this.BookRepository.GetBooksAsync();
@@ -31,7 +31,7 @@ namespace PrivateCollection.Controllers
             if(!ModelState.IsValid) 
                 return BadRequest(ModelState);
 
-            return Ok(books);
+            return Ok(this.Mapper.Map<List<BookDto>>(books));
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace PrivateCollection.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(book);
+            return Ok(this.Mapper.Map<BookDto>(book));
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace PrivateCollection.Controllers
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
-        [HttpGet("/{title}")]
+        [HttpGet("title/{title}")]
         [ProducesResponseType(200, Type = typeof(BookDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -75,14 +75,14 @@ namespace PrivateCollection.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(book);
+            return Ok(this.Mapper.Map<BookDto>(book));
         }
 
         /// <summary>
         ///  Return all Unfinished books book
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/unfinishedBooks")]
+        [HttpGet("unfinishedBooks")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))]
         public async Task<IActionResult> GetUnfinishedBooks()
         {

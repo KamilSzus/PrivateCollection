@@ -20,6 +20,7 @@ namespace PrivateCollection
             //builder.Services.AddDbContext<PrivateCollectionContext>(options => options.UseSqlite());
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddSwaggerGen(c =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
@@ -29,7 +30,7 @@ namespace PrivateCollection
             });
 
             builder.Services.AddDbContext<PrivateCollectionContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString("PrivateCollectionDB")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PrivateCollectionDB")));
 
             var app = builder.Build();
 
