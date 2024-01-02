@@ -13,7 +13,7 @@ using PrivateCollection.Data;
 namespace PrivateCollection.Migrations
 {
     [DbContext(typeof(PrivateCollectionContext))]
-    [Migration("20231231122039_InitialCreate")]
+    [Migration("20240102180900_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -28,11 +28,11 @@ namespace PrivateCollection.Migrations
 
             modelBuilder.Entity("PrivateCollection.Models.BoardGame", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -60,6 +60,21 @@ namespace PrivateCollection.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BoardsGames");
+                });
+
+            modelBuilder.Entity("PrivateCollection.Models.BoardGameGenre", b =>
+                {
+                    b.Property<long>("BoardGameId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("GenereId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("BoardGameId", "GenereId");
+
+                    b.HasIndex("GenereId");
+
+                    b.ToTable("BoardGameGenres");
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.Book", b =>
@@ -95,51 +110,91 @@ namespace PrivateCollection.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("PrivateCollection.Models.Category", b =>
+            modelBuilder.Entity("PrivateCollection.Models.BookGenre", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BoardGameId")
-                        .HasColumnType("integer");
-
-                    b.Property<long?>("BookId")
+                    b.Property<long>("BookId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Genre")
-                        .HasColumnType("integer");
+                    b.Property<long>("GenereId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("BookId", "GenereId");
+
+                    b.HasIndex("GenereId");
+
+                    b.ToTable("BookGenres");
+                });
+
+            modelBuilder.Entity("PrivateCollection.Models.Genre", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("GenreType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BoardGameId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("Categories");
+                    b.ToTable("Genre");
                 });
 
-            modelBuilder.Entity("PrivateCollection.Models.Category", b =>
+            modelBuilder.Entity("PrivateCollection.Models.BoardGameGenre", b =>
                 {
-                    b.HasOne("PrivateCollection.Models.BoardGame", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("BoardGameId");
+                    b.HasOne("PrivateCollection.Models.BoardGame", "BoardGame")
+                        .WithMany("BoardGameGenre")
+                        .HasForeignKey("BoardGameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("PrivateCollection.Models.Book", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("BookId");
+                    b.HasOne("PrivateCollection.Models.Genre", "Genre")
+                        .WithMany("BoardGameGenres")
+                        .HasForeignKey("GenereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BoardGame");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("PrivateCollection.Models.BookGenre", b =>
+                {
+                    b.HasOne("PrivateCollection.Models.Book", "Book")
+                        .WithMany("BookGenres")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PrivateCollection.Models.Genre", "Genre")
+                        .WithMany("BookGenres")
+                        .HasForeignKey("GenereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Genre");
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.BoardGame", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("BoardGameGenre");
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.Book", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("BookGenres");
+                });
+
+            modelBuilder.Entity("PrivateCollection.Models.Genre", b =>
+                {
+                    b.Navigation("BoardGameGenres");
+
+                    b.Navigation("BookGenres");
                 });
 #pragma warning restore 612, 618
         }

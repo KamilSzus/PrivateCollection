@@ -9,6 +9,6 @@
         public TimeSpan? ReadTime { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; } = null;
-        public required ICollection<Category> Categories { get; set; }
+        public virtual ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>();
     }
 }

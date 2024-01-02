@@ -17,7 +17,7 @@ namespace PrivateCollection.Migrations
                 name: "BoardsGames",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
@@ -51,52 +51,94 @@ namespace PrivateCollection.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Genre",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Genre = table.Column<int>(type: "integer", nullable: false),
-                    BoardGameId = table.Column<int>(type: "integer", nullable: true),
-                    BookId = table.Column<long>(type: "bigint", nullable: true)
+                    GenreType = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Genre", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BoardGameGenres",
+                columns: table => new
+                {
+                    BoardGameId = table.Column<long>(type: "bigint", nullable: false),
+                    GenereId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BoardGameGenres", x => new { x.BoardGameId, x.GenereId });
                     table.ForeignKey(
-                        name: "FK_Categories_BoardsGames_BoardGameId",
+                        name: "FK_BoardGameGenres_BoardsGames_BoardGameId",
                         column: x => x.BoardGameId,
                         principalTable: "BoardsGames",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Categories_Books_BookId",
+                        name: "FK_BoardGameGenres_Genre_GenereId",
+                        column: x => x.GenereId,
+                        principalTable: "Genre",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookGenres",
+                columns: table => new
+                {
+                    BookId = table.Column<long>(type: "bigint", nullable: false),
+                    GenereId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookGenres", x => new { x.BookId, x.GenereId });
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Genre_GenereId",
+                        column: x => x.GenereId,
+                        principalTable: "Genre",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_BoardGameId",
-                table: "Categories",
-                column: "BoardGameId");
+                name: "IX_BoardGameGenres_GenereId",
+                table: "BoardGameGenres",
+                column: "GenereId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_BookId",
-                table: "Categories",
-                column: "BookId");
+                name: "IX_BookGenres_GenereId",
+                table: "BookGenres",
+                column: "GenereId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "BoardGameGenres");
+
+            migrationBuilder.DropTable(
+                name: "BookGenres");
 
             migrationBuilder.DropTable(
                 name: "BoardsGames");
 
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Genre");
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class BoardGame
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
         public int NumberOfGamesPlayed { get; set; } = 0;
@@ -10,7 +10,7 @@
         public TimeSpan? InGameTime { get; set; }
         public DateTime? LastGame {  get; set; }
         public int? GameCount { get; set; } = 0;
-        public required ICollection<Category> Categories { get; set; }
+        public virtual ICollection<BoardGameGenre> BoardGameGenre { get; set; } = new List<BoardGameGenre>();
 
     }
 }
