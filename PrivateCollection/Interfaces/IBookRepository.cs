@@ -1,4 +1,5 @@
-﻿using PrivateCollection.Models;
+﻿using PrivateCollection.Dto;
+using PrivateCollection.Models;
 
 namespace PrivateCollection.Interfaces
 {
@@ -9,5 +10,6 @@ namespace PrivateCollection.Interfaces
         public Task<Book?> GetBookByTitleAsync(string title);
         public Task<bool> BookExistAsync(int id);
         public Task<ICollection<Book>> GetUnfishedBooksAsync();
+        public Task<Book> CreateBook(BookDto book);
     }
 }

@@ -89,30 +89,23 @@ namespace PrivateCollection.Controllers
             return Ok(await this.BookRepository.GetUnfishedBooksAsync());
         }
 
+        /// <summary>
+        ///  Add book to collection
+        /// </summary>
+        /// <param name="book"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))]
+        public async Task<IActionResult> CreateBook([FromBody] BookDto book)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            var newBook = await this.BookRepository.CreateBook(book);
 
-        //
-        //   /// <summary>
-        //   ///  Add book to collection
-        //   /// </summary>
-        //   /// <param name="book"></param>
-        //   /// <returns></returns>
-        //   [HttpPost]
-        //   public async Task<IActionResult> CreateBook([FromBody] Book book)
-        //   {
-        //       if (!ModelState.IsValid)
-        //           return BadRequest(ModelState);
-        //
-        //
-        //       if (await BookExists(book))
-        //           return Conflict("A book with the same title already exists.");
-        //
-        //       await this.Context.Books.AddAsync(book);
-        //       await this.Context.SaveChangesAsync();
-        //
-        //       return CreatedAtAction(nameof(GetBooks), new { book.Id }, book);
-        //   }
-        //
+            return Ok(this.Mapper.Map<BookDto>(newBook));
+        }
+        
         //   /// <summary>
         //   /// Delete book by title
         //   /// </summary>

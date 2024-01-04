@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Data;
+using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Models;
 
@@ -19,14 +20,47 @@ namespace PrivateCollection.Repository
             return await this.Context.Books.AnyAsync(b => b.Id == id);
         }
 
+        public async Task<Book> CreateBook(BookDto book)
+        {
+            var existingBook = await this.Context.Books.FindAsync(book.Id);
+
+            if (existingBook is null)
+            {
+                var newBook = new Book
+                {
+                    Title = book.Title,
+                    Authors = book.Authors,
+                    IsFinished = book.IsFinished,
+                    StartDate = book.StartDate,
+                    EndDate = book.StartDate,
+                    ReadTime = book.IsFinished ? book.EndDate - book.StartDate : null,
+
+                };
+
+                this.Context.Books.Add(newBook);
+                this.Context.SaveChanges();
+
+                return newBook;
+            }
+
+            existingBook.Title = book.Title;
+            existingBook.Authors = book.Authors;
+           // existingBook.BookGenres.Where(bg => bg.)
+
+            this.Context.Update(book);
+            await this.Context.SaveChangesAsync();
+
+            return existingBook;
+        }
+
         public async Task<Book?> GetBookByIdAsync(int id)
         {
-            return await this.Context.Books.Where(b => b.Id == id).FirstOrDefaultAsync();
+            return await this.Context.Books.FindAsync(id);
         }
 
         public async Task<Book?> GetBookByTitleAsync(string title)
         {
-            return await this.Context.Books.Where(b => b.Title == title).FirstOrDefaultAsync();
+            return await this.Context.Books.FirstOrDefaultAsync(b => b.Title == title);
         }
 
         public async Task<ICollection<Book>> GetBooksAsync()
