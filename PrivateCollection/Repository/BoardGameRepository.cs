@@ -18,7 +18,7 @@ namespace PrivateCollection.Repository
 
         public async Task<BoardGame> CreateBoardGame(BoardGameDto boardGame)
         {
-            var existingBoardGame = await this.Context.BoardsGames.FindAsync(boardGame.Id);
+            var existingBoardGame = await this.Context.BoardGames.FindAsync(boardGame.Id);
 
             if (existingBoardGame is null)
             {
@@ -47,17 +47,17 @@ namespace PrivateCollection.Repository
 
         public async Task<BoardGame?> GetBoardGameById(long boardGameId)
         {
-            return await this.Context.BoardsGames.FindAsync(boardGameId);
+            return await this.Context.BoardGames.FindAsync(boardGameId);
         }
 
         public async Task<BoardGame?> GetBoardGameByName(string name)
         {
-            return await this.Context.BoardsGames.FirstOrDefaultAsync(bg => bg.Name == name);
+            return await this.Context.BoardGames.FirstOrDefaultAsync(bg => bg.Name == name);
         }
 
         public async Task<IEnumerable<BoardGame?>> GetListOfBoardGames()
         {
-            return await this.Context.BoardsGames.OrderBy(bg => bg.Name).ToListAsync();
+            return await this.Context.BoardGames.OrderBy(bg => bg.Name).ToListAsync();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace PrivateCollection.Data
         }
 
         public DbSet<Book> Books { get; set; }
-        public DbSet<BoardGame> BoardsGames { get; set; }
+        public DbSet<BoardGame> BoardGames { get; set; }
         public DbSet<Genre> Genre { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<BoardGameGenre> BoardGameGenres { get; set; }
