@@ -9,6 +9,7 @@ namespace PrivateCollection.Helper
         public MappingProfiles()
         {
             CreateMap<Book,BookDto>();
+            CreateMap<BoardGame, BoardGameDto>();
         }
     }
 }

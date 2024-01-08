@@ -19,6 +19,7 @@ namespace PrivateCollection
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             //builder.Services.AddDbContext<PrivateCollectionContext>(options => options.UseSqlite());
             builder.Services.AddScoped<IBookRepository, BookRepository>();
+            builder.Services.AddScoped<IBoardGameRepository, BoardGameRepository>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddSwaggerGen(c =>
