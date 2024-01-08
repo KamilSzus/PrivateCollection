@@ -15,7 +15,7 @@ namespace PrivateCollection.Repository
             this.Context = context;
         }
 
-        public async Task<bool> BookExistAsync(int id)
+        public async Task<bool> BookExistAsync(long id)
         {
             return await this.Context.Books.AnyAsync(b => b.Id == id);
         }
@@ -48,12 +48,12 @@ namespace PrivateCollection.Repository
            // existingBook.BookGenres.Where(bg => bg.)
 
             this.Context.Update(book);
-            await this.Context.SaveChangesAsync();
+            this.Context.SaveChanges();
 
             return existingBook;
         }
 
-        public async Task<Book?> GetBookByIdAsync(int id)
+        public async Task<Book?> GetBookByIdAsync(long id)
         {
             return await this.Context.Books.FindAsync(id);
         }

@@ -43,7 +43,7 @@ namespace PrivateCollection.Controllers
         [ProducesResponseType(200, Type = typeof(BookDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetBookById(int bookId)
+        public async Task<IActionResult> GetBookById(long bookId)
         {
             if(await this.BookRepository.BookExistAsync(bookId))
                 return NotFound();

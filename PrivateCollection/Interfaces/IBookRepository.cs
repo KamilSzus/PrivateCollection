@@ -6,9 +6,9 @@ namespace PrivateCollection.Interfaces
     public interface IBookRepository
     {
         public Task<ICollection<Book>> GetBooksAsync();
-        public Task<Book?> GetBookByIdAsync(int id);
+        public Task<Book?> GetBookByIdAsync(long id);
         public Task<Book?> GetBookByTitleAsync(string title);
-        public Task<bool> BookExistAsync(int id);
+        public Task<bool> BookExistAsync(long id);
         public Task<ICollection<Book>> GetUnfishedBooksAsync();
         public Task<Book> CreateBook(BookDto book);
     }
