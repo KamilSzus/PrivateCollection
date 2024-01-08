@@ -13,7 +13,7 @@ using PrivateCollection.Data;
 namespace PrivateCollection.Migrations
 {
     [DbContext(typeof(PrivateCollectionContext))]
-    [Migration("20240102180900_InitialCreate")]
+    [Migration("20240108192143_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,21 +37,9 @@ namespace PrivateCollection.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int?>("GameCount")
-                        .HasColumnType("integer");
-
-                    b.Property<TimeSpan?>("InGameTime")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime?>("LastGame")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("NumberOfGamesPlayed")
-                        .HasColumnType("integer");
 
                     b.Property<string>("PublishingHouse")
                         .IsRequired()
@@ -75,6 +63,37 @@ namespace PrivateCollection.Migrations
                     b.HasIndex("GenereId");
 
                     b.ToTable("BoardGameGenres");
+                });
+
+            modelBuilder.Entity("PrivateCollection.Models.BoardGameStats", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("BoardGameId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("GameCount")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeSpan?>("InGameTime")
+                        .HasColumnType("interval");
+
+                    b.Property<DateTime?>("LastGame")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("NumberOfWinGame")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoardGameId")
+                        .IsUnique();
+
+                    b.ToTable("BoardGameStats");
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.Book", b =>
@@ -161,6 +180,15 @@ namespace PrivateCollection.Migrations
                     b.Navigation("Genre");
                 });
 
+            modelBuilder.Entity("PrivateCollection.Models.BoardGameStats", b =>
+                {
+                    b.HasOne("PrivateCollection.Models.BoardGame", null)
+                        .WithOne("BoardGameStats")
+                        .HasForeignKey("PrivateCollection.Models.BoardGameStats", "BoardGameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PrivateCollection.Models.BookGenre", b =>
                 {
                     b.HasOne("PrivateCollection.Models.Book", "Book")
@@ -183,6 +211,8 @@ namespace PrivateCollection.Migrations
             modelBuilder.Entity("PrivateCollection.Models.BoardGame", b =>
                 {
                     b.Navigation("BoardGameGenre");
+
+                    b.Navigation("BoardGameStats");
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.Book", b =>

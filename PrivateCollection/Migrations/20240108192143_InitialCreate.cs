@@ -21,11 +21,7 @@ namespace PrivateCollection.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    NumberOfGamesPlayed = table.Column<int>(type: "integer", nullable: false),
-                    PublishingHouse = table.Column<string>(type: "text", nullable: false),
-                    InGameTime = table.Column<TimeSpan>(type: "interval", nullable: true),
-                    LastGame = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    GameCount = table.Column<int>(type: "integer", nullable: true)
+                    PublishingHouse = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,6 +57,29 @@ namespace PrivateCollection.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genre", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BoardGameStats",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BoardGameId = table.Column<long>(type: "bigint", nullable: false),
+                    GameCount = table.Column<int>(type: "integer", nullable: true),
+                    InGameTime = table.Column<TimeSpan>(type: "interval", nullable: true),
+                    LastGame = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    NumberOfWinGame = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BoardGameStats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BoardGameStats_BoardsGames_BoardGameId",
+                        column: x => x.BoardGameId,
+                        principalTable: "BoardsGames",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -117,6 +136,12 @@ namespace PrivateCollection.Migrations
                 column: "GenereId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BoardGameStats_BoardGameId",
+                table: "BoardGameStats",
+                column: "BoardGameId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BookGenres_GenereId",
                 table: "BookGenres",
                 column: "GenereId");
@@ -127,6 +152,9 @@ namespace PrivateCollection.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BoardGameGenres");
+
+            migrationBuilder.DropTable(
+                name: "BoardGameStats");
 
             migrationBuilder.DropTable(
                 name: "BookGenres");
