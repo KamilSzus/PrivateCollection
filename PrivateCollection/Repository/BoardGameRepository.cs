@@ -26,9 +26,10 @@ namespace PrivateCollection.Repository
                 {
                     Name = boardGame.Name,
                     PublishingHouse = boardGame.PublishingHouse,
-                    Description = boardGame.Description
-                };
-                
+                    Description = boardGame.Description,
+                    BoardGameStats = new BoardGameStats() { }
+            };
+
                 this.Context.Add(newBoardGame);
                 this.Context.SaveChanges();
 

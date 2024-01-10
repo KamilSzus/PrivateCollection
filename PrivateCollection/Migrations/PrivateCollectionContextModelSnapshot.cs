@@ -44,7 +44,7 @@ namespace PrivateCollection.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BoardGames");
+                    b.ToTable("BoardGames", (string)null);
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.BoardGameGenre", b =>
@@ -59,7 +59,7 @@ namespace PrivateCollection.Migrations
 
                     b.HasIndex("GenereId");
 
-                    b.ToTable("BoardGameGenres");
+                    b.ToTable("BoardGameGenres", (string)null);
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.BoardGameStats", b =>
@@ -90,7 +90,7 @@ namespace PrivateCollection.Migrations
                     b.HasIndex("BoardGameId")
                         .IsUnique();
 
-                    b.ToTable("BoardGameStats");
+                    b.ToTable("BoardGameStats", (string)null);
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.Book", b =>
@@ -123,7 +123,7 @@ namespace PrivateCollection.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.BookGenre", b =>
@@ -138,7 +138,7 @@ namespace PrivateCollection.Migrations
 
                     b.HasIndex("GenereId");
 
-                    b.ToTable("BookGenres");
+                    b.ToTable("BookGenres", (string)null);
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.Genre", b =>
@@ -155,7 +155,7 @@ namespace PrivateCollection.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genre");
+                    b.ToTable("Genre", (string)null);
                 });
 
             modelBuilder.Entity("PrivateCollection.Models.BoardGameGenre", b =>
