@@ -74,6 +74,22 @@ namespace PrivateCollection.Controllers
             return this.Mapper.Map<BoardGameDto>(newBoardGame);
         }
 
+        /// <summary>
+        /// Delete Board Game
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType(200, Type = typeof(BoardGameDto))]
+        public async Task<BoardGameDto> DeleteBoardGamek(string name)
+        {
+            var boardGameToDelete = await this.BoardGameRepository.DeleteBoardGame(name);
+
+            if (boardGameToDelete is null)
+                return null;
+
+            return this.Mapper.Map<BoardGameDto>(boardGameToDelete);
+        }
 
     }
 }

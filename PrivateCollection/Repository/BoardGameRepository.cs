@@ -18,7 +18,7 @@ namespace PrivateCollection.Repository
 
         public async Task<BoardGame> CreateBoardGame(BoardGameDto boardGame)
         {
-            var existingBoardGame = await this.Context.BoardGames.FindAsync(boardGame.Id);
+            var existingBoardGame = await GetBoardGameByName(boardGame.Name);
 
             if (existingBoardGame is null)
             {
@@ -28,7 +28,9 @@ namespace PrivateCollection.Repository
                     PublishingHouse = boardGame.PublishingHouse,
                     Description = boardGame.Description,
                     BoardGameStats = new BoardGameStats() { }
-            };
+                };
+
+
 
                 this.Context.Add(newBoardGame);
                 this.Context.SaveChanges();
@@ -44,6 +46,20 @@ namespace PrivateCollection.Repository
             this.Context.SaveChanges();
 
             return existingBoardGame;
+        }
+
+        public async Task<BoardGame> DeleteBoardGame(string name)
+        {
+            var boardGameToDelete = await GetBoardGameByName(name);
+
+            if (boardGameToDelete is null)
+                return null;
+
+            //this.Context?.Remove(boardGameToDelete.BoardGameStats);
+            this.Context?.Remove(boardGameToDelete);
+            this.Context?.SaveChanges();
+
+            return boardGameToDelete;
         }
 
         public async Task<BoardGame?> GetBoardGameById(long boardGameId)
