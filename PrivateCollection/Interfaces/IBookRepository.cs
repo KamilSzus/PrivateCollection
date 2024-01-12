@@ -10,6 +10,7 @@ namespace PrivateCollection.Interfaces
         public Task<Book?> GetBookByTitleAsync(string title);
         public Task<bool> BookExistAsync(long id);
         public Task<ICollection<Book>> GetUnfishedBooksAsync();
-        public Task<Book> CreateBook(BookDto book);
+        public Task<Book> CreateBookAsync(BookDto book);
+        public Task<Book> DeleteBookAsync(long bookId);
     }
 }

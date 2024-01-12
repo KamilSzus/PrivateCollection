@@ -28,7 +28,7 @@ namespace PrivateCollection.Controllers
         {
             var books = await this.BookRepository.GetBooksAsync();
 
-            if(!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             return Ok(this.Mapper.Map<List<BookDto>>(books));
@@ -45,7 +45,7 @@ namespace PrivateCollection.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetBookById(long bookId)
         {
-            if(await this.BookRepository.BookExistAsync(bookId))
+            if (await this.BookRepository.BookExistAsync(bookId))
                 return NotFound();
 
             var book = await this.BookRepository.GetBookByIdAsync(bookId);
@@ -69,7 +69,7 @@ namespace PrivateCollection.Controllers
         {
             var book = await this.BookRepository.GetBookByTitleAsync(title);
 
-            if(book is null)
+            if (book is null)
                 return NotFound();
 
             if (!ModelState.IsValid)
@@ -101,63 +101,27 @@ namespace PrivateCollection.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var newBook = await this.BookRepository.CreateBook(book);
+            var newBook = await this.BookRepository.CreateBookAsync(book);
 
             return Ok(this.Mapper.Map<BookDto>(newBook));
         }
-        
-        //   /// <summary>
-        //   /// Delete book by title
-        //   /// </summary>
-        //   /// <param name="title"></param>
-        //   /// <returns></returns>
-        //   [HttpDelete("{title}")]
-        //   public async Task<IActionResult> DeleteBookByTitle(string title)
-        //   {
-        //       var bookToDelete = await this.Context.Books.FirstOrDefaultAsync(b => b.Title.Equals(title));
-        //
-        //       if (bookToDelete is null)
-        //           return NotFound();
-        //
-        //       this.Context.Books.Remove(bookToDelete);
-        //       await this.Context.SaveChangesAsync();
-        //
-        //       return NoContent();
-        //   }
-        //
-        //   /// <summary>
-        //   /// Update book
-        //   /// </summary>
-        //   /// <param name="id"></param>
-        //   /// <param name="book"></param>
-        //   /// <returns></returns>
-        //   [HttpPut("{id}")]
-        //   public async Task<IActionResult> UpdateBook(int id, [FromBody] Book book)
-        //   {
-        //       if (!ModelState.IsValid || id < 0)
-        //           return BadRequest();
-        //
-        //       this.Context.Books.Entry(book).State = EntityState.Modified;
-        //
-        //       try
-        //       {
-        //           await this.Context.SaveChangesAsync();
-        //       }
-        //       catch (DbUpdateConcurrencyException)
-        //       {
-        //           if (! await BookExists(book))
-        //               return NotFound();
-        //           else
-        //               throw new DbUpdateConcurrencyException("Update Exception");
-        //       }
-        //
-        //       return Ok(book);
-        //
-        //   }
-        //
-        //   async Task<bool> BookExists(Book book)
-        //   {
-        //       return await this.Context.Books.AnyAsync(b => b.Title.Equals(book.Title));
-        //   }
+
+        /// <summary>
+        /// Delete book by title
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))]
+        public async Task<IActionResult> DeleteBookByTitle(long bookId)
+        {
+            var bookToDelete = await this.BookRepository.DeleteBookAsync(bookId);
+
+            if (bookToDelete is null)
+                return NotFound();
+
+
+            return Ok(bookToDelete);
+        }
     }
 }

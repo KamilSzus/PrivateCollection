@@ -20,7 +20,7 @@ namespace PrivateCollection.Repository
             return await this.Context.Books.AnyAsync(b => b.Id == id);
         }
 
-        public async Task<Book> CreateBook(BookDto book)
+        public async Task<Book> CreateBookAsync(BookDto book)
         {
             var existingBook = await this.Context.Books.FindAsync(book.Id);
 
@@ -51,6 +51,19 @@ namespace PrivateCollection.Repository
             this.Context.SaveChanges();
 
             return existingBook;
+        }
+
+        public async Task<Book> DeleteBookAsync(long bookId)
+        {
+            var bookToDelete = await this.Context.Books.FindAsync(bookId);
+
+            if (bookToDelete is null)
+                return null;
+
+            this.Context.Books.Remove(bookToDelete);
+            this.Context.SaveChanges();
+
+            return bookToDelete;
         }
 
         public async Task<Book?> GetBookByIdAsync(long id)
