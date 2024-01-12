@@ -55,7 +55,6 @@ namespace PrivateCollection.Repository
             if (boardGameToDelete is null)
                 return null;
 
-            //this.Context?.Remove(boardGameToDelete.BoardGameStats);
             this.Context?.Remove(boardGameToDelete);
             this.Context?.SaveChanges();
 
