@@ -33,9 +33,9 @@ namespace PrivateCollection.Repository
                     IsFinished = book.IsFinished,
                     StartDate = book.StartDate,
                     EndDate = book.StartDate,
-                    ReadTime = book.IsFinished ? book.EndDate - book.StartDate : null,
-
+                    ReadTime = book.IsFinished ? book.EndDate - book.StartDate : null
                 };
+
 
                 this.Context.Books.Add(newBook);
                 this.Context.SaveChanges();

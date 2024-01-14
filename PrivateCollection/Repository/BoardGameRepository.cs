@@ -63,17 +63,24 @@ namespace PrivateCollection.Repository
 
         public async Task<BoardGame?> GetBoardGameById(long boardGameId)
         {
-            return await this.Context.BoardGames.FindAsync(boardGameId);
+            return await this.Context.BoardGames
+                .Include(bg => bg.BoardGameStats)
+                .FirstOrDefaultAsync(bg => bg.Id == boardGameId);
         }
 
         public async Task<BoardGame?> GetBoardGameByName(string name)
         {
-            return await this.Context.BoardGames.FirstOrDefaultAsync(bg => bg.Name == name);
+            return await this.Context.BoardGames
+                .Include(bg => bg.BoardGameStats)
+                .FirstOrDefaultAsync(bg => bg.Name == name);
         }
 
         public async Task<IEnumerable<BoardGame?>> GetListOfBoardGames()
         {
-            return await this.Context.BoardGames.OrderBy(bg => bg.Name).ToListAsync();
+            return await this.Context.BoardGames
+                .Include(bg => bg.BoardGameStats)
+                .OrderBy(bg => bg.Name)
+                .ToListAsync();
         }
     }
 }

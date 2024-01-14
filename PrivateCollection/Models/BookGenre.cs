@@ -6,7 +6,7 @@ namespace PrivateCollection.Models
     {
         public long BookId { get; set; }
         public long GenereId  { get; set; }
-        public required Book Book { get; set; }
-        public required Genre Genre { get; set; }
+        public Book Book { get; set; }
+        public Genre Genre { get; set; }
     }
 }
