@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
 
@@ -122,6 +123,24 @@ namespace PrivateCollection.Controllers
 
 
             return Ok(bookToDelete);
+        }
+
+        /// <summary>
+        /// Updates reading time
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))]
+        public async Task<IActionResult> FinishReadingBook([BindRequired][FromQuery]string title, [BindRequired][FromQuery]DateTime endDate)
+        {
+            var finishedBook = await this.BookRepository.FinishBookAsync(endDate, title);
+
+            if (finishedBook is null)
+                return NotFound(); 
+            
+            return Ok(finishedBook);
         }
     }
 }

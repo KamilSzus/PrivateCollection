@@ -66,6 +66,22 @@ namespace PrivateCollection.Repository
             return bookToDelete;
         }
 
+        public async Task<Book> FinishBookAsync(DateTime EndDate, string title)
+        {
+            var bookToFinish = await GetBookByTitleAsync(title);
+
+            if (bookToFinish is null)
+                return null;
+
+            bookToFinish.EndDate = EndDate;
+            bookToFinish.ReadTime = bookToFinish.StartDate - EndDate;
+
+            this.Context.Books.Update(bookToFinish);
+            this.Context.SaveChanges();
+
+            return bookToFinish;
+        }
+
         public async Task<Book?> GetBookByIdAsync(long id)
         {
             return await this.Context.Books.FindAsync(id);
