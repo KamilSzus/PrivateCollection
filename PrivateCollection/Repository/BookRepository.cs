@@ -23,7 +23,7 @@ namespace PrivateCollection.Repository
 
         public async Task<Book> CreateBookAsync(BookDto book)
         {
-            var existingBook = await this.Context.Books.FindAsync(book.Id);
+            var existingBook = await GetBookByTitleAsync(book.Title);
 
             if (existingBook is null)
             {
@@ -44,11 +44,12 @@ namespace PrivateCollection.Repository
                 return newBook;
             }
 
-            existingBook.Title = book.Title;
             existingBook.Authors = book.Authors;
-           // existingBook.BookGenres.Where(bg => bg.)
+            existingBook.StartDate = ConvertToDateTimeZone(book.StartDate);
+            existingBook.EndDate = ConvertToDateTimeZone(book.EndDate);
+            existingBook.ReadTime = book.IsFinished ? book.EndDate - book.StartDate : null;
 
-            this.Context.Update(book);
+            this.Context.Update(existingBook);
             this.Context.SaveChanges();
 
             return existingBook;
@@ -74,8 +75,8 @@ namespace PrivateCollection.Repository
             if (bookToFinish is null)
                 return null;
 
-            bookToFinish.EndDate = EndDate;
-            bookToFinish.ReadTime = bookToFinish.StartDate - EndDate;
+            bookToFinish.EndDate = ConvertToDateTimeZone(EndDate);
+            bookToFinish.ReadTime = EndDate - bookToFinish.StartDate;
 
             this.Context.Books.Update(bookToFinish);
             this.Context.SaveChanges();
