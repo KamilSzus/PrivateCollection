@@ -108,13 +108,13 @@ namespace PrivateCollection.Controllers
         }
 
         /// <summary>
-        /// Delete book by title
+        /// Delete book by id
         /// </summary>
         /// <param name="bookId"></param>
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))]
-        public async Task<IActionResult> DeleteBookByTitle(long bookId)
+        public async Task<IActionResult> DeleteBookById(long bookId)
         {
             var bookToDelete = await this.BookRepository.DeleteBookAsync(bookId);
 

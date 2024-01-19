@@ -3,6 +3,7 @@ using PrivateCollection.Data;
 using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Models;
+using System;
 
 namespace PrivateCollection.Repository
 {
@@ -31,8 +32,8 @@ namespace PrivateCollection.Repository
                     Title = book.Title,
                     Authors = book.Authors,
                     IsFinished = book.IsFinished,
-                    StartDate = book.StartDate,
-                    EndDate = book.StartDate,
+                    StartDate = ConvertToDateTimeZone(book.StartDate),
+                    EndDate = ConvertToDateTimeZone(book.EndDate),
                     ReadTime = book.IsFinished ? book.EndDate - book.StartDate : null
                 };
 
@@ -100,6 +101,16 @@ namespace PrivateCollection.Repository
         public async Task<ICollection<Book>> GetUnfishedBooksAsync()
         {
             return await this.Context.Books.Where(b => b.IsFinished == false).ToListAsync();
+        }
+
+        private DateTime? ConvertToDateTimeZone(DateTime? dateTime)
+        {
+            if (dateTime.HasValue)
+            {
+                return TimeZoneInfo.ConvertTimeToUtc(dateTime.Value.ToLocalTime());
+            }
+
+            return null;
         }
     }
 }
