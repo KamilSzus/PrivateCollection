@@ -3,6 +3,7 @@ using PrivateCollection.Data;
 using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Models;
+using System;
 
 namespace PrivateCollection.Repository
 {
@@ -22,7 +23,7 @@ namespace PrivateCollection.Repository
 
         public async Task<Book> CreateBookAsync(BookDto book)
         {
-            var existingBook = await this.Context.Books.FindAsync(book.Id);
+            var existingBook = await GetBookByTitleAsync(book.Title);
 
             if (existingBook is null)
             {
@@ -31,8 +32,8 @@ namespace PrivateCollection.Repository
                     Title = book.Title,
                     Authors = book.Authors,
                     IsFinished = book.IsFinished,
-                    StartDate = book.StartDate,
-                    EndDate = book.StartDate,
+                    StartDate = ConvertToDateTimeZone(book.StartDate),
+                    EndDate = ConvertToDateTimeZone(book.EndDate),
                     ReadTime = book.IsFinished ? book.EndDate - book.StartDate : null
                 };
 
@@ -43,11 +44,12 @@ namespace PrivateCollection.Repository
                 return newBook;
             }
 
-            existingBook.Title = book.Title;
             existingBook.Authors = book.Authors;
-           // existingBook.BookGenres.Where(bg => bg.)
+            existingBook.StartDate = ConvertToDateTimeZone(book.StartDate);
+            existingBook.EndDate = ConvertToDateTimeZone(book.EndDate);
+            existingBook.ReadTime = book.IsFinished ? book.EndDate - book.StartDate : null;
 
-            this.Context.Update(book);
+            this.Context.Update(existingBook);
             this.Context.SaveChanges();
 
             return existingBook;
@@ -64,6 +66,22 @@ namespace PrivateCollection.Repository
             this.Context.SaveChanges();
 
             return bookToDelete;
+        }
+
+        public async Task<Book> FinishBookAsync(DateTime EndDate, string title)
+        {
+            var bookToFinish = await GetBookByTitleAsync(title);
+
+            if (bookToFinish is null)
+                return null;
+
+            bookToFinish.EndDate = ConvertToDateTimeZone(EndDate);
+            bookToFinish.ReadTime = EndDate - bookToFinish.StartDate;
+
+            this.Context.Books.Update(bookToFinish);
+            this.Context.SaveChanges();
+
+            return bookToFinish;
         }
 
         public async Task<Book?> GetBookByIdAsync(long id)
@@ -84,6 +102,16 @@ namespace PrivateCollection.Repository
         public async Task<ICollection<Book>> GetUnfishedBooksAsync()
         {
             return await this.Context.Books.Where(b => b.IsFinished == false).ToListAsync();
+        }
+
+        private DateTime? ConvertToDateTimeZone(DateTime? dateTime)
+        {
+            if (dateTime.HasValue)
+            {
+                return TimeZoneInfo.ConvertTimeToUtc(dateTime.Value.ToLocalTime());
+            }
+
+            return null;
         }
     }
 }

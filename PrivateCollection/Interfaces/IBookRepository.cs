@@ -12,5 +12,6 @@ namespace PrivateCollection.Interfaces
         public Task<ICollection<Book>> GetUnfishedBooksAsync();
         public Task<Book> CreateBookAsync(BookDto book);
         public Task<Book> DeleteBookAsync(long bookId);
+        public Task<Book> FinishBookAsync(DateTime EndDate, string title);
     }
 }
