@@ -10,5 +10,6 @@ namespace PrivateCollection.Interfaces
         public Task<BoardGame?> GetBoardGameByName(string name);
         public Task<BoardGame> CreateBoardGame(BoardGameDto boardGame);
         public Task<BoardGame> DeleteBoardGame(string name);
+        public Task<BoardGame> UpdateBoardGameStats(string name, DateTime lastGameDate, TimeSpan gameTime);
     }
 }

@@ -82,5 +82,34 @@ namespace PrivateCollection.Repository
                 .OrderBy(bg => bg.Name)
                 .ToListAsync();
         }
+
+        public async Task<BoardGame> UpdateBoardGameStats(string name, DateTime lastGameDate, TimeSpan gameTime)
+        {
+            var boardGameToUpdate = await GetBoardGameByName(name);
+
+            if (boardGameToUpdate is null)
+                throw new ArgumentException("Given game doesn't exist");
+
+            boardGameToUpdate.BoardGameStats.LastGame = ConvertToDateTimeZone(lastGameDate);
+            boardGameToUpdate.BoardGameStats.InGameTime = boardGameToUpdate.BoardGameStats.InGameTime.HasValue
+                ? boardGameToUpdate.BoardGameStats.InGameTime.Value.Add(gameTime) : gameTime;
+            boardGameToUpdate.BoardGameStats.GameCount++;
+
+            this.Context.Update(boardGameToUpdate);
+            this.Context.SaveChanges();
+
+            return boardGameToUpdate;
+        }
+
+        //TO DO: move this to helper class
+        private DateTime? ConvertToDateTimeZone(DateTime? dateTime)
+        {
+            if (dateTime.HasValue)
+            {
+                return TimeZoneInfo.ConvertTimeToUtc(dateTime.Value.ToLocalTime());
+            }
+
+            return null;
+        }
     }
 }
