@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Repository;
@@ -91,5 +92,19 @@ namespace PrivateCollection.Controllers
             return this.Mapper.Map<BoardGameDto>(boardGameToDelete);
         }
 
+        [HttpPut]
+        [ProducesResponseType(200, Type = typeof(BoardGameDto))]
+        public async Task<BoardGameDto> UpdateBoardGameStat([BindRequired][FromQuery] string boardGameTitle,
+            [BindRequired][FromQuery] DateTime lastGameDate, [BindRequired][FromQuery] string gameTime)
+        {
+            var isCorrectFormat = TimeSpan.TryParse(gameTime, out var time);
+
+            if (!isCorrectFormat)
+                throw new ArgumentException("Given game time is incorrect");
+
+            var boardGameToUpdate = await this.BoardGameRepository.UpdateBoardGameStats(boardGameTitle, lastGameDate, time);
+
+            return this.Mapper.Map<BoardGameDto>(boardGameToUpdate);
+        }
     }
 }
