@@ -1,7 +1,9 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Data;
 using PrivateCollection.Interfaces;
+using PrivateCollection.Models;
 using PrivateCollection.Repository;
 using System.Reflection;
 
@@ -13,11 +15,8 @@ namespace PrivateCollection
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            //builder.Services.AddDbContext<PrivateCollectionContext>(options => options.UseSqlite());
+
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IBoardGameRepository, BoardGameRepository>();
             builder.Services.AddEndpointsApiExplorer();
@@ -30,12 +29,20 @@ namespace PrivateCollection
                 c.IncludeXmlComments(xmlPath);
             });
 
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 10;
+            })
+                .AddEntityFrameworkStores<PrivateCollectionContext>();
+
             builder.Services.AddDbContext<PrivateCollectionContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PrivateCollectionDB")));
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

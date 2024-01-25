@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Models;
 using System.Reflection.Metadata;
 
 namespace PrivateCollection.Data
 {
-    public class PrivateCollectionContext : DbContext
+    public class PrivateCollectionContext : IdentityDbContext<User>
     {
         public PrivateCollectionContext(DbContextOptions<PrivateCollectionContext> dbContextOptions)
             : base(dbContextOptions)
