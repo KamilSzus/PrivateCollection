@@ -7,7 +7,7 @@ namespace PrivateCollection.Data
 {
     public class PrivateCollectionContext : IdentityDbContext<User>
     {
-        public PrivateCollectionContext(DbContextOptions<PrivateCollectionContext> dbContextOptions)
+        public PrivateCollectionContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions)
         {
         }
@@ -22,6 +22,8 @@ namespace PrivateCollection.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BookGenre>()
                     .HasKey(bg => new { bg.BookId, bg.GenereId });
             modelBuilder.Entity<BookGenre>()

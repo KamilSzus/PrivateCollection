@@ -1,6 +1,8 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PrivateCollection.Data;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Models;
@@ -35,8 +37,29 @@ namespace PrivateCollection
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 10;
-            })
-                .AddEntityFrameworkStores<PrivateCollectionContext>();
+            }).AddEntityFrameworkStores<PrivateCollectionContext>();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme =
+                options.DefaultSignOutScheme =
+                options.DefaultSignInScheme =
+                options.DefaultForbidScheme =
+                options.DefaultChallengeScheme =
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWT:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:Audience"],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
+                };
+            });
 
             builder.Services.AddDbContext<PrivateCollectionContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PrivateCollectionDB")));
@@ -52,6 +75,7 @@ namespace PrivateCollection
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
 
             app.MapControllers();
