@@ -1,24 +1,29 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PrivateCollection.Dto;
-using PrivateCollection.Models;
+using PrivateCollection.Interfaces;
 
 namespace PrivateCollection.Controllers
 {
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<User> UserManager;
+        private readonly IBookRepository BookRepository;
+        private readonly IMapper Mapper;
 
-        public UserController(UserManager<User> userManager)
+        public UserController(IBookRepository bookRepository, IMapper mapper)
         {
-            this.UserManager = userManager;
+            this.BookRepository = bookRepository;
+            this.Mapper = mapper;
         }
 
         [HttpPost("/registration")]
         public async Task<UserDto> Registration([FromBody] UserDto newUser)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                throw new ArgumentException("Missing data");
+
+            return newUser;
         }
 
         [HttpPost("/login")]
