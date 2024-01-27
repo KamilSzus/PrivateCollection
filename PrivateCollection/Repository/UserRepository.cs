@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PrivateCollection.Data;
+using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Models;
 
@@ -16,6 +17,27 @@ namespace PrivateCollection.Repository
             this.UserManager = userManager;
         }
 
+        public async Task<UserDto> CreateUser(UserDto user)
+        {
+            var newUser = new User
+            {
+                UserName = user.Username,
+                Email = user.Email
+            };
 
+            var createdUser = await this.UserManager.CreateAsync(newUser, user.Password);
+
+            if (createdUser.Succeeded)
+            {
+                var userRole = await this.UserManager.AddToRoleAsync(newUser, "User");
+
+                if (userRole.Succeeded)
+                {
+                    return user;
+                }
+            }
+
+            return user;
+        }
     }
 }

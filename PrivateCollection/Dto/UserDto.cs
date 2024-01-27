@@ -6,9 +6,9 @@ namespace PrivateCollection.Dto
     {
 
         public required string Username { get; set; }
-        public required string password { get; set; }
+        public required string Password { get; set; }
         [EmailAddress]
-        public required string email { get; set; }
+        public required string Email { get; set; }
         public Guid Token { get; set; }
     }
 }
