@@ -8,20 +8,23 @@ namespace PrivateCollection.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IBookRepository BookRepository;
+        private readonly IUserRepository UserRepository;
         private readonly IMapper Mapper;
 
-        public UserController(IBookRepository bookRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
-            this.BookRepository = bookRepository;
+            this.UserRepository = userRepository;
             this.Mapper = mapper;
         }
 
         [HttpPost("/registration")]
-        public async Task<UserDto> Registration([FromBody] UserDto newUser)
+        public async Task<UserDto> Registration([FromBody] UserDto user)
         {
             if (!ModelState.IsValid)
                 throw new ArgumentException("Missing data");
+
+            var newUser = await this.UserRepository.CreateUser(user);
+
 
             return newUser;
         }
