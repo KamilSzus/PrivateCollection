@@ -17,8 +17,8 @@ namespace PrivateCollection.Controllers
             this.Mapper = mapper;
         }
 
-        [HttpPost("/registration")]
-        public async Task<UserDto> Registration([FromBody] UserDto user)
+        [HttpPost("registration")]
+        public async Task<UserDto> Registration([FromBody] UserRegistrationDto user)
         {
             if (!ModelState.IsValid)
                 throw new ArgumentException("Missing data");
@@ -29,11 +29,11 @@ namespace PrivateCollection.Controllers
             return newUser;
         }
 
-        [HttpPost("/login")]
-        public async Task<IActionResult> Login([FromBody] UserDto newUser)
-        {
-            throw new NotImplementedException();
-        }
+        //[HttpPost("/login")]
+        //public async Task<IActionResult> Login([FromBody] UserDto newUser)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
     }
 }

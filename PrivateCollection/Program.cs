@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PrivateCollection.Controllers;
 using PrivateCollection.Data;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Models;
 using PrivateCollection.Repository;
+using PrivateCollection.Service;
 using System.Reflection;
 
 namespace PrivateCollection
@@ -21,6 +23,8 @@ namespace PrivateCollection
 
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IBoardGameRepository, BoardGameRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddSwaggerGen(c =>

@@ -92,6 +92,14 @@ namespace PrivateCollection.Controllers
             return this.Mapper.Map<BoardGameDto>(boardGameToDelete);
         }
 
+        /// <summary>
+        /// Update board game stats
+        /// </summary>
+        /// <param name="boardGameTitle"></param>
+        /// <param name="lastGameDate"></param>
+        /// <param name="gameTime"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         [HttpPut]
         [ProducesResponseType(200, Type = typeof(BoardGameDto))]
         public async Task<BoardGameDto> UpdateBoardGameStat([BindRequired][FromQuery] string boardGameTitle,

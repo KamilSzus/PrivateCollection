@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using PrivateCollection.Controllers;
 using PrivateCollection.Data;
 using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
@@ -10,14 +11,16 @@ namespace PrivateCollection.Repository
     {
         private readonly PrivateCollectionContext Context;
         private readonly UserManager<User> UserManager;
+        private readonly ITokenService TokenService;
 
-        public UserRepository(PrivateCollectionContext context, UserManager<User> userManager)
+        public UserRepository(PrivateCollectionContext context, UserManager<User> userManager, ITokenService tokenService)
         {
             this.Context = context;
             this.UserManager = userManager;
+            this.TokenService = tokenService;
         }
 
-        public async Task<UserDto> CreateUser(UserDto user)
+        public async Task<UserDto> CreateUser(UserRegistrationDto user)
         {
             var newUser = new User
             {
@@ -33,11 +36,17 @@ namespace PrivateCollection.Repository
 
                 if (userRole.Succeeded)
                 {
-                    return user;
+                    return new UserDto
+                    { 
+                        Email = user.Email,
+                        Password = user.Password,
+                        Username = user.Username,
+                        Token = TokenService.GenerateToken(newUser)
+                    };
                 }
             }
 
-            return user;
+            return null;
         }
     }
 }

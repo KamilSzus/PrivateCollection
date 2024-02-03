@@ -1,6 +1,4 @@
-﻿using PrivateCollection.Enums;
-
-namespace PrivateCollection.Models
+﻿namespace PrivateCollection.Models
 {
     public class BookGenre
     {
