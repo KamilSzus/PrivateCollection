@@ -17,7 +17,14 @@ namespace PrivateCollection.Controllers
             this.Mapper = mapper;
         }
 
+        /// <summary>
+        /// Register a new user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         [HttpPost("registration")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<UserDto>))]
         public async Task<UserDto> Registration([FromBody] UserRegistrationDto user)
         {
             if (!ModelState.IsValid)
@@ -29,11 +36,26 @@ namespace PrivateCollection.Controllers
             return newUser;
         }
 
-        //[HttpPost("/login")]
-        //public async Task<IActionResult> Login([FromBody] UserDto newUser)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        /// <summary>
+        /// Login user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        [HttpPost("login")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BoardGameDto>))]
+        public async Task<UserLoggedDto> Login([FromBody] UserLoginDto user)
+        {
+            if (!ModelState.IsValid)
+                throw new ArgumentException("Missing data");
+
+            var loggedUser = await this.UserRepository.LoginUser(user);
+
+            if (loggedUser is null)
+                return null;
+
+            return loggedUser;
+        }
 
     }
 }

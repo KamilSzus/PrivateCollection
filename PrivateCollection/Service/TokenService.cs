@@ -1,5 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using PrivateCollection.Controllers;
+using PrivateCollection.Interfaces;
 using PrivateCollection.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

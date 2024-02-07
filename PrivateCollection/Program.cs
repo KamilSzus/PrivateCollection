@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using PrivateCollection.Controllers;
 using PrivateCollection.Data;
 using PrivateCollection.Interfaces;
 using PrivateCollection.Models;

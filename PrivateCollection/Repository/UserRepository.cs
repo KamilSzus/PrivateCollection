@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using PrivateCollection.Controllers;
+using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Data;
 using PrivateCollection.Dto;
 using PrivateCollection.Interfaces;
@@ -11,12 +11,14 @@ namespace PrivateCollection.Repository
     {
         private readonly PrivateCollectionContext Context;
         private readonly UserManager<User> UserManager;
+        private readonly SignInManager<User> SignInManager;
         private readonly ITokenService TokenService;
 
-        public UserRepository(PrivateCollectionContext context, UserManager<User> userManager, ITokenService tokenService)
+        public UserRepository(PrivateCollectionContext context, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService)
         {
             this.Context = context;
             this.UserManager = userManager;
+            this.SignInManager = signInManager;
             this.TokenService = tokenService;
         }
 
@@ -47,6 +49,25 @@ namespace PrivateCollection.Repository
             }
 
             return null;
+        }
+        public async Task<UserLoggedDto?> LoginUser(UserLoginDto user)
+        {
+            var loggedUser = await this.UserManager.Users.FirstOrDefaultAsync(u => u.Email == user.Email.ToLower());
+
+            if (loggedUser is null)
+                return null;
+
+            var result = await this.SignInManager.CheckPasswordSignInAsync(loggedUser, user.Password, false);
+
+            if (!result.Succeeded)
+                return null;
+
+            return new UserLoggedDto
+            {
+                Email = loggedUser.Email,
+                UserName = loggedUser.UserName,
+                Token = TokenService.GenerateToken(loggedUser)
+            };
         }
     }
 }

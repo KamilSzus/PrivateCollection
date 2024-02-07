@@ -1,6 +1,6 @@
 ﻿using PrivateCollection.Models;
 
-namespace PrivateCollection.Controllers
+namespace PrivateCollection.Interfaces
 {
     public interface ITokenService
     {
