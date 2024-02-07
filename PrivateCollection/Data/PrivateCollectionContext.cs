@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PrivateCollection.Models;
 using System.Reflection.Metadata;
 
 namespace PrivateCollection.Data
 {
-    public class PrivateCollectionContext : DbContext
+    public class PrivateCollectionContext : IdentityDbContext<User>
     {
-        public PrivateCollectionContext(DbContextOptions<PrivateCollectionContext> dbContextOptions)
+        public PrivateCollectionContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions)
         {
         }
@@ -21,6 +23,8 @@ namespace PrivateCollection.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BookGenre>()
                     .HasKey(bg => new { bg.BookId, bg.GenereId });
             modelBuilder.Entity<BookGenre>()
@@ -42,6 +46,23 @@ namespace PrivateCollection.Data
                     .HasOne(b => b.Genre)
                     .WithMany(bgg => bgg.BoardGameGenres)
                     .HasForeignKey(g => g.GenereId);
+
+
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER"
+                },
+            };
+
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
         }
     }
 }

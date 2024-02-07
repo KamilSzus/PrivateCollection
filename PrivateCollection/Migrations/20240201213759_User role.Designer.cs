@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PrivateCollection.Data;
@@ -12,9 +13,11 @@ using PrivateCollection.Data;
 namespace PrivateCollection.Migrations
 {
     [DbContext(typeof(PrivateCollectionContext))]
-    partial class PrivateCollectionContextModelSnapshot : ModelSnapshot
+    [Migration("20240201213759_User role")]
+    partial class Userrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
