@@ -52,7 +52,7 @@ namespace PrivateCollection.Repository
         }
         public async Task<UserLoggedDto?> LoginUser(UserLoginDto user)
         {
-            var loggedUser = await this.UserManager.Users.FirstOrDefaultAsync(u => u.Email == user.Email.ToLower());
+            var loggedUser = await this.UserManager.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == user.Email.ToLower());
 
             if (loggedUser is null)
                 return null;

@@ -45,11 +45,11 @@ namespace PrivateCollection
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =
-                options.DefaultSignOutScheme =
-                options.DefaultSignInScheme =
-                options.DefaultForbidScheme =
                 options.DefaultChallengeScheme =
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultForbidScheme =
+                options.DefaultScheme =
+                options.DefaultSignInScheme =
+                options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
