@@ -79,7 +79,11 @@ namespace PrivateCollection
 
             app.UseAuthorization();
             app.UseAuthentication();
-
+            app.UseCors(cors => cors
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .SetIsOriginAllowed(origin => true));
 
             app.MapControllers();
 
