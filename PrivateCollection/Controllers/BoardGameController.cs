@@ -52,7 +52,7 @@ namespace PrivateCollection.Controllers
         /// </summary>
         /// <param name="boardGameName"></param>
         /// <returns></returns>
-        [HttpGet("name/{boardGameId}")]
+        [HttpGet("title/{boardGameName}")]
         [ProducesResponseType(200, Type = typeof(BoardGameDto))]
         public async Task<BoardGameDto> GetBoardGameByName(string boardGameName)
         {
